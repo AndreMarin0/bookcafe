@@ -6,6 +6,7 @@ use App\Models\Collection;
 use App\Models\Author;
 use App\Models\Genre;
 use App\Models\Publisher;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCollectionRequest;
@@ -20,11 +21,31 @@ class CollectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         
-        $collections = Collection::all();
-        return view('BookCafe_Sys.bc_collection', compact('collections'));
+        // $collections = Collection::all();
+        // return view('BookCafe_Sys.bc_collection', compact('collections'));
+
+        $query = Collection::query();
+
+    // Apply search filters if any
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+        $query->where(function($q) use ($search) {
+            $q->where('BookID', 'like', "%{$search}%")
+              ->orWhere('Description', 'like', "%{$search}%")
+              ->orWhere('AuthorID', 'like', "%{$search}%")
+              ->orWhere('PubID', 'like', "%{$search}%")
+              ->orWhere('GenID', 'like', "%{$search}%");
+        });
+    }
+
+    // Paginate the results
+    $perPage = 10;
+    $collections = $query->paginate($perPage);
+
+    return view('BookCafe_Sys.bc_collection', compact('collections'));
     
     }
 

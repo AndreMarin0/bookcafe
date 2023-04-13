@@ -1,11 +1,16 @@
 body{   
     font-family: "Times New Roman", Times, serif;
-    background: url('https://images.pexels.com/photos/745365/pexels-photo-745365.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;             
-    background-color:#333;      
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364)!important;
+    background-size: cover!important;    
+    min-height: 100vh;      
 }   
+.bg-light-opacity {
+  background-color: rgba(255, 255, 255, 0.5)!important;
+}
+.card {
+  overflow: hidden;
+}
+
 .navsize{
     font-size: 20px;
 }
@@ -35,18 +40,14 @@ body{
       padding: 5px;
     }
   }
-  .containerLogin{
-    display: flex;
-    justify-content: right;
-    align-items:center !important;
-    height: 100vh;
-    
-  }
+  
   .form{
     width: 350px;
     height: 450px;
     background-color: rgba(41, 39, 39, 0.3);
     box-shadow: 0 5px 30px black;
+    max-width: 500px;
+    margin: 0 auto;
   }
   .btn button {
     padding: 3px;
@@ -113,18 +114,6 @@ body{
     border-bottom: 2px solid rgb(249,115,0);
   }
    
-  /* hide signup form */
-  .login{
-    display: none;
-  }
-   
-  /* Login form code */
-  .login{
-    margin-top: 40px;
-  }
-  .login .checkBox{
-    margin-top: 30px !important;
-  }
 
 .description{
     position: absolute;
@@ -212,58 +201,113 @@ p{
 }
 
 .containerEdit{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color:rgba(41, 39, 39, 0.3);
-    color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color:rgba(41, 39, 39, 0.3);
+  color: white;
 }
 
 .formGroup{
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box; /* add this */
 }
 
 .formGroup label{
-    margin-bottom: 5px;
-    font-weight: bold;
+  /* margin-bottom: 5px; */
+  font-weight: bold;
+  display: inline-block;
+  width: 100px;
+  margin-right: 10px;
 }
 
 .formGroup select,
 .formGroup input{
-    border: none;
-    width: 100%;
-    border-bottom: 2px solid white;
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    background-color: transparent;
-    color: white;
+  border: none;
+  width: 100%;
+  border-bottom: 2px solid white;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  background-color: transparent;
+  color: white;
 }
 
 .formGroup select:focus,
 .formGroup input:focus {
-    outline: none !important;
-    border-bottom: 2px solid rgb(249,115,0);
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
+  outline: none !important;
+  border-bottom: 2px solid rgb(249,115,0);
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
 }
 
 .btn2{
-    padding: 10px 20px;
-    border-radius: 20px;
-    background-color: rgb(249,115,0);
-    border-style: none;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: rgb(249,115,0);
+  border-style: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .btn2:hover{
-    background-color: rgba(249,115,0, 0.8);
+  background-color: rgba(249,115,0, 0.8);
+}
+
+ul.pagination {
+  margin: 0;
+  padding: 0;
+}
+
+ul.pagination li {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+ul.pagination li a {
+  color: #000;
+  display: block;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: center;
+}
+
+ul.pagination li a:hover,
+ul.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+ul.pagination li:first-child a,
+ul.pagination li:last-child a {
+  margin: 0;
+}
+
+ul.pagination li.disabled a {
+  color: #bbb;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+ul.pagination li span {
+  color: #bbb;
+  display: block;
+  padding: 5px 10px;
+  text-align: center;
+}
+
+select option {
+  background-color: #333;
+  color: #fff;
 }
