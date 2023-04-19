@@ -11,14 +11,14 @@
         
         <div class="formGroup">
             <label for="Description">Description:</label>
-            <input type="text" id="Description" name="Description">
+            <input type="text" id="Description" name="Description" value="{{ $collection->Description }}">
         </div>
 
         <div class="formGroup">
             <label for="AuthorID">Author:</label>
             <select id="AuthorID" name="AuthorID">
                 @foreach($authors as $author)
-                    <option value = {{ $author->AuthorID }} > {{ $author->AuthorName }}</option>
+                    <option value="{{ $author->AuthorID }}" {{ $author->AuthorID == $collection->AuthorID ? 'selected' : '' }}>{{ $author->AuthorName }}</option>
                 @endforeach
             </select>
         </div>
@@ -27,7 +27,7 @@
             <label for="PubID">Publisher:</label>
             <select id="PubID" name="PubID">
                 @foreach($publishers as $publisher)
-                    <option value = {{ $publisher->PubID }} > {{ $publisher->PublisherName }}</option>
+                    <option value="{{ $publisher->PubID }}" {{ $publisher->PubID == $collection->PubID ? 'selected' : '' }}>{{ $publisher->PublisherName }}</option>
                 @endforeach
             </select>
         </div>
@@ -36,7 +36,7 @@
             <label for="GenID">Genre:</label>
             <select id="GenID" name="GenID">
                 @foreach($genres as $genre)
-                    <option value = {{ $genre->GenID }} > {{ $genre->Genre }}</option>
+                    <option value="{{ $genre->GenID }}" {{ $genre->GenID == $collection->GenID ? 'selected' : '' }}>{{ $genre->Genre }}</option>
                 @endforeach
             </select>
         </div>

@@ -7,7 +7,6 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page_title')</title>
-    {{-- <title>{{ config('app.name', 'Laravel') }}</title> --}}
 
     <!-- Fonts -->
     <link rel="stylesheet" href="/styles.css">
@@ -18,31 +17,30 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js') }}" defer></script>
 
-    <!-- Scripts -->
-    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong fixed-top navsize">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-5-strong fixed-top navsize">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/landing') }}">
+                <a class="navbar-brand" style="pointer-events: none;" href="">
                     {{-- {{ config('app.name', 'Laravel') }} --}}
                     BOOK CAFE SYSTEM
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
+        
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/landing">Home</a>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item {{ Request::path() === 'landing' ? 'active' : '' }}">
+                            <a class="nav-link" href="/landing">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/collections">Collection</a>
+                        <li class="nav-item {{ Request::path() === 'collections' ? 'active' : '' }}">
+                            <a class="nav-link" href="/collections">Library</a>
                         </li>  
-
+                    </ul>
+        
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
@@ -52,36 +50,34 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
+        
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" style="pointer-events: none;">{{ Auth::user()->name }}</a>
                             </li>
-                            <li>
-                                {{-- <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"> --}}
-                                    <a class="nav-link" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                {{-- </div> --}}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+        
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </li>
                         @endguest
                     </ul>
                 </div>
             </div>
         </nav>
+        
+        
 
         <main class="py-4">
             <h1 style="padding-top:50px;"></h1>

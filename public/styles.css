@@ -311,3 +311,7 @@ select option {
   background-color: #333;
   color: #fff;
 }
+
+.bg-black {
+  background-color: #1a1717;
+}

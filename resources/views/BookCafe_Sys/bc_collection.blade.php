@@ -69,7 +69,7 @@
                         <thead>
                             <tr>
                                 <th>Book ID</th>
-                                <th>Description</th>
+                                <th>Title</th>
                                 <th>Author</th>
                                 <th>Publisher</th>
                                 <th>Genre</th>
@@ -82,9 +82,9 @@
                             <tr>
                                 <td>{{ $collection->BookID }}</td>
                                 <td>{{ $collection->Description }}</td>
-                                <td>{{ $collection->AuthorID }}</td>
-                                <td>{{ $collection->PubID }}</td>
-                                <td>{{ $collection->GenID }}</td>
+                                <td>{{ $collection->author->AuthorName }}</td>
+                                <td>{{ $collection->publisher->PublisherName }}</td>
+                                <td>{{ $collection->genre->Genre }}</td>
                                 <td>
                                     <a class="btn btn-outline-success" href="{{route('collections.edit',$collection->BookID)}}" role="button">
                                         Edit

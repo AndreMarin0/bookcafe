@@ -22,14 +22,10 @@ class CollectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-        
+    {      
         // $collections = Collection::all();
-        // return view('BookCafe_Sys.bc_collection', compact('collections'));
-
         $query = Collection::query();
 
-    // Apply search filters if any
     if ($request->filled('search')) {
         $search = $request->input('search');
         $query->where(function($q) use ($search) {
@@ -41,8 +37,7 @@ class CollectionController extends Controller
         });
     }
 
-    // Paginate the results
-    $perPage = 10;
+    $perPage = 5;
     $collections = $query->paginate($perPage);
 
     return view('BookCafe_Sys.bc_collection', compact('collections'));

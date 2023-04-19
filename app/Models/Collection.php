@@ -17,5 +17,20 @@ class Collection extends Model
         'GenID',
     ];
     protected $primaryKey = 'BookID';
+            public function publisher()
+        {
+            return $this->belongsTo(Publisher::class, 'PubID');
+        }
+
+            public function author()
+        {
+            return $this->belongsTo(Author::class, 'AuthorID');
+        }
+            public function genre()
+        {
+            return $this->belongsTo(Genre::class, 'GenID');
+        }
+
+
     
 }
