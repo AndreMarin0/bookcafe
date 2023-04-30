@@ -31,6 +31,11 @@ class Collection extends Model
             return $this->belongsTo(Genre::class, 'GenID');
         }
 
+    protected $rules = [
+            'Description' => 'required',
+            // other rules here...
+        ];
+        
 
     
 }

@@ -44,7 +44,13 @@
     </div>
 @endif
 
-<?php use Illuminate\Support\Facades\Auth;?>
+<?php 
+use Illuminate\Support\Facades\Auth;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Response;
+use App\Http\Controllers\CollectionController;
+?>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -63,6 +69,8 @@
                             </span>
                         </div>
                     </form>
+                    <br>
+
                     <br>
 
                     <table class="table">
@@ -111,15 +119,35 @@
                     </div>
 
                     <div class="text-center mt-3">
-                        <a class="btn btn-lg btn-warning" href="{{ route('collections.create') }}" role="button">
-                            <i class="fas fa-plus-circle mr-2"></i> Add Book
-                        </a>
-                    </div>
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-sm btn-warning mr-3" href="{{ route('collections.create') }}" role="button">
+                            Add Book
+                            </a>                              
+                            <form id="pdf-form" action="{{ route('collection.generatePDF') }}" method="GET">
+                                @csrf                               
+                                <button type="submit" class="btn btn-sm btn-warning ml-3">
+                                    Generate PDF
+                                </button>
+                            </form>                                                                                                                                                                                                                                               
+                        </div>
+                    </div> 
+
+                    
+
+                    
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+{{-- <script>
+    function generatePDF() {
+        // document.getElementById("pdf-form").submit();
+        var form = document.getElementById('pdf-form');
+        form.submit();
+    }
+    </script> --}}
 
 @endsection

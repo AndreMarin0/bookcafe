@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\Collection;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,12 +25,19 @@ use App\Http\Middleware\AdminMiddleware;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('/bookpdf', function () {
+    $collections =Collection::all();
+    return view('book-pdf')->with('collections', $collections);
+});
+
+
+Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');
+
 
 Route::prefix('admin')->middleware('auth', 'isAdmin')->group(function() {
-// admin only entry
-Route::get('/collections/create', [CollectionController::class, 'create'])->name('collections.create');
-// Route::get('/collections/edit', [CollectionController::class, 'edit'])->name('collections.edit');
-Route::get('/collections/{collection}/edit', [CollectionController::class, 'edit'])->name('collections.edit');
+    // admin only entry
+    Route::get('/collections/create', [CollectionController::class, 'create'])->name('collections.create');
+    Route::get('/collections/{collection}/edit', [CollectionController::class, 'edit'])->name('collections.edit');
 });
 
 Route::middleware([AdminMiddleware::class])->group(function () {
@@ -45,9 +54,12 @@ Route::get('/home', function () {
     return view('layouts.app');
 });
 
+
+
 Route::get('/landing', function () {
     return view('BookCafe.book_cafe');
 });
+
 
 Route::resource('collections', CollectionController::class)->except(['create','edit']);//added
 Route::resource('authors', AuthorController::class);//added
@@ -55,7 +67,6 @@ Route::resource('genres', GenreController::class);//added
 Route::resource('publishers', PublisherController::class);//added
 Auth::routes();
 Auth::routes(['logout' => true]);
-
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

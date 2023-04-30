@@ -11,7 +11,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCollectionRequest;
 use App\Http\Requests\UpdateCollectionRequest;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\DB;
+
 
 
 class CollectionController extends Controller
@@ -23,26 +25,34 @@ class CollectionController extends Controller
      */
     public function index(Request $request)
     {      
-        // $collections = Collection::all();
         $query = Collection::query();
-
-    if ($request->filled('search')) {
-        $search = $request->input('search');
-        $query->where(function($q) use ($search) {
-            $q->where('BookID', 'like', "%{$search}%")
-              ->orWhere('Description', 'like', "%{$search}%")
-              ->orWhere('AuthorID', 'like', "%{$search}%")
-              ->orWhere('PubID', 'like', "%{$search}%")
-              ->orWhere('GenID', 'like', "%{$search}%");
-        });
-    }
-
-    $perPage = 5;
-    $collections = $query->paginate($perPage);
-
-    return view('BookCafe_Sys.bc_collection', compact('collections'));
     
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('BookID', 'like', "%{$search}%")
+                  ->orWhere('Description', 'like', "%{$search}%")
+                  ->orWhere('AuthorID', 'like', "%{$search}%")
+                  ->orWhere('PubID', 'like', "%{$search}%")
+                  ->orWhere('GenID', 'like', "%{$search}%");
+            });
+        }
+    
+        $perPage = 5;
+        $collections = $query->paginate($perPage);
+        return view('BookCafe_Sys.bc_collection', compact('collections'));
     }
+    
+  
+    public function generatePDF()
+    {           
+        // dd('PDF generation code is being executed');
+        $collections =Collection::all();
+        $pdf = PDF::loadView('book-pdf', compact('collections'));
+        return $pdf->download('book-collections.pdf');
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,10 +76,16 @@ class CollectionController extends Controller
      */
     public function store(StoreCollectionRequest $request)
     {
-        Collection::create($request->all());
-        // Author::create($request->all());
-        // Genre::create($request->all());
-        // Publisher::create($request->all());
+        // Collection::create($request->all());
+        $this->validate($request, [
+            'Description' => 'required',
+            // other validation rules here...
+        ]);
+    
+        $collection = new Collection();
+        $collection->Description = $request->input('Description');
+        // set other fields here...
+        $collection->save();
         return redirect('/collections')->with('success', 'Form submitted successfully!');
 
     }
