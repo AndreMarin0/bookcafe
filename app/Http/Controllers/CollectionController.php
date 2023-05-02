@@ -24,33 +24,35 @@ class CollectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {      
+    {
         $query = Collection::query();
-    
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('BookID', 'like', "%{$search}%")
-                  ->orWhere('Description', 'like', "%{$search}%")
-                  ->orWhereHas('author', function($query) use ($search) {
-                      $query->where('AuthorName', 'like', "%{$search}%");
-                  })
-                  ->orWhereHas('publisher', function($query) use ($search) {
-                      $query->where('PublisherName', 'like', "%{$search}%");
-                  })
-                  ->orWhereHas('genre', function($query) use ($search) {
-                      $query->where('Genre', 'like', "%{$search}%");
-                  });
+                ->orWhere('Description', 'like', "%{$search}%")
+                ->orWhereHas('author', function($query) use ($search) {
+                    $query->where('AuthorName', 'like', "%{$search}%");
+                })
+                ->orWhereHas('publisher', function($query) use ($search) {
+                    $query->where('PublisherName', 'like', "%{$search}%");
+                })
+                ->orWhereHas('genre', function($query) use ($search) {
+                    $query->where('Genre', 'like', "%{$search}%");
+                });
             });
         }
-    
+
         $perPage = 5;
         $collections = $query->paginate($perPage);
-        $collections->appends($request->query());
-        return view('BookCafe_Sys.bc_collection', compact('collections'));
-    }    
+        $collections->appends($request->query());      
+        $count = $collections->total();
+        $message = ($count === 1) ? '1 result found' : "$count results found";
+        
+        return view('BookCafe_Sys.bc_collection', compact('collections', 'message'));
+    }
 
-  
+
     public function generatePDF()
     {           
         // dd('PDF generation code is being executed');
@@ -85,13 +87,14 @@ class CollectionController extends Controller
     {
         // Collection::create($request->all());
         $this->validate($request, [
-            'Description' => 'required',
-            // other validation rules here...
+            'Description' => 'required',           
         ]);
     
         $collection = new Collection();
         $collection->Description = $request->input('Description');
-        // set other fields here...
+        $collection->AuthorID = $request->AuthorID; // Add this line to set the AuthorID
+        $collection->PubID = $request->PubID;
+        $collection->GenID = $request->GenID;
         $collection->save();
         return redirect('/collections')->with('success', 'Form submitted successfully!');
 

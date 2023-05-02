@@ -71,6 +71,10 @@ use App\Http\Controllers\CollectionController;
                     </form>
                     <br>
 
+                    <div class="d-flex justify-content-center">  
+                        <div>{{ $message }}</div>                      
+                    </div>
+                    
                     <br>
 
                     <table class="table">
@@ -81,7 +85,6 @@ use App\Http\Controllers\CollectionController;
                                 <th>Author</th>
                                 <th>Publisher</th>
                                 <th>Genre</th>
-                                <th> </th>
                                 @if(Auth::check() && Auth::user()->isAdmin()) <th> </th> @endif
                             </tr>
                         </thead>
@@ -93,13 +96,13 @@ use App\Http\Controllers\CollectionController;
                                 <td>{{ $collection->author->AuthorName }}</td>
                                 <td>{{ $collection->publisher->PublisherName }}</td>
                                 <td>{{ $collection->genre->Genre }}</td>
+                                
+                                @if(Auth::check() && Auth::user()->isAdmin())
                                 <td>
                                     <a class="btn btn-outline-success" href="{{route('collections.edit',$collection->BookID)}}" role="button">
                                         Edit
                                     </a>
-                                </td>
-                                @if(Auth::check() && Auth::user()->isAdmin())
-                                <td>
+                                        <p> </p>
                                     <form action="{{route('collections.destroy', $collection->BookID)}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                         @csrf
                                         @method('DELETE')
