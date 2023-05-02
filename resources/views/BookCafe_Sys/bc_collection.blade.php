@@ -114,8 +114,8 @@ use App\Http\Controllers\CollectionController;
                         </tbody>
                     </table>
 
-                    <div class="d-flex justify-content-center">
-                        {{ $collections->links('vendor.pagination.bootstrap-4') }}
+                    <div class="d-flex justify-content-center">                   
+                        {{ $collections->appends(request()->query())->links('vendor.pagination.bootstrap-4') }}
                     </div>
 
                     <div class="text-center mt-3">

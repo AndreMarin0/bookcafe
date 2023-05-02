@@ -32,17 +32,24 @@ class CollectionController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('BookID', 'like', "%{$search}%")
                   ->orWhere('Description', 'like', "%{$search}%")
-                  ->orWhere('AuthorID', 'like', "%{$search}%")
-                  ->orWhere('PubID', 'like', "%{$search}%")
-                  ->orWhere('GenID', 'like', "%{$search}%");
+                  ->orWhereHas('author', function($query) use ($search) {
+                      $query->where('AuthorName', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('publisher', function($query) use ($search) {
+                      $query->where('PublisherName', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('genre', function($query) use ($search) {
+                      $query->where('Genre', 'like', "%{$search}%");
+                  });
             });
         }
     
         $perPage = 5;
         $collections = $query->paginate($perPage);
+        $collections->appends($request->query());
         return view('BookCafe_Sys.bc_collection', compact('collections'));
-    }
-    
+    }    
+
   
     public function generatePDF()
     {           
