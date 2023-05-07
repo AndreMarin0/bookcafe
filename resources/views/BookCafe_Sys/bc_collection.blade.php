@@ -60,17 +60,39 @@ use App\Http\Controllers\CollectionController;
                 <div class="card-header headings">{{ __('Book List') }}</div>
 
                 <div class="card-body ">
-                    <form action="{{ route('collections.index') }}" method="GET" role="search">
-                        <div class="input-group">
+                    <form id="search-form" action="{{ route('collections.index') }}" method="GET" role="search">
+                        <div class="form-group">
+                          <label for="search">Search books:</label>
+                          <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Search books">
                             <span class="input-group-btn">
-                                <button type="submit" class="btn btn-default">
-                                    <span class="fas fa-search"></span>
-                                </button>
+                              <button type="submit" class="btn btn-default">
+                                <span class="fas fa-search"></span>
+                              </button>
                             </span>
+                          </div>
                         </div>
-                    </form>
-                    <br>
+                        <div class="form-group col-sm-4">
+                          <label for="filter">Filter by:</label>
+                          <select id="filter-select" name="filter" class="form-control">
+                            <option value="">All</option>
+                            <optgroup label="Genre">
+                              <option value="comedy">Comedy</option>
+                              <option value="romance">Romance</option>
+                            </optgroup>
+                            <optgroup label="Author">
+                              <option value="andre">Andre</option>
+                              <option value="nina">Nina</option>
+                            </optgroup>
+                            <optgroup label="Publisher">
+                              <option value="comics123">Comics123</option>
+                              <option value="manga">Manga</option>
+                            </optgroup>
+                          </select>
+                        </div>
+                      </form>
+                      
+        
 
                     <div class="d-flex justify-content-center headings">  
                         <div>{{ $message }}</div>                      
@@ -237,5 +259,17 @@ const myChart = new Chart(ctx, chartConfig);
 
 </script>
 
+<script>
+    const form = document.getElementById('search-form');
+    const filterSelect = document.getElementById('filter-select');
+    filterSelect.addEventListener('change', (event) => {
+      const searchInput = document.getElementsByName('search')[0];
+      const searchValue = searchInput.value.trim();
+      const filterValue = filterSelect.value.trim();
+      const query = `search=${encodeURIComponent(searchValue)}&filter=${encodeURIComponent(filterValue)}`;
+      form.action = "{{ route('collections.index') }}?" + query;
+      form.submit();
+    });
+  </script>
 
 @endsection

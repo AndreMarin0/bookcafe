@@ -26,60 +26,108 @@ class CollectionController extends Controller
     public function index(Request $request)
     {
         $query = Collection::query();
+
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function($q) use ($search) {
                 $q->where('BookID', 'like', "%{$search}%")
                 ->orWhere('Description', 'like', "%{$search}%")
                 ->orWhereHas('author', function($query) use ($search) {
-                    $query->where('AuthorName', 'like', "%{$search}%");
+                        $query->where('AuthorName', 'like', "%{$search}%");
                 })
                 ->orWhereHas('publisher', function($query) use ($search) {
-                    $query->where('PublisherName', 'like', "%{$search}%");
+                        $query->where('PublisherName', 'like', "%{$search}%");
                 })
                 ->orWhereHas('genre', function($query) use ($search) {
-                    $query->where('Genre', 'like', "%{$search}%");
+                        $query->where('Genre', 'like', "%{$search}%");
                 });
             });
+
             session(['search' => $search]); // save the search keyword in session
         } else {
             session()->forget('search'); // remove the search keyword from session if not set
         }
 
+        if ($request->filled('filter')) {
+            $filter = $request->input('filter');
+            $query->whereHas('genre', function($query) use ($filter) {
+                $query->where('Genre', $filter);
+            })->orWhereHas('author', function($query) use ($filter) {
+                $query->where('AuthorName', $filter);
+            })->orWhereHas('publisher', function($query) use ($filter) {
+                $query->where('PublisherName', $filter);
+            });
+
+            session(['filter' => $filter]); // save the filter keyword in session
+        } else {
+            session()->forget('filter'); // remove the filter keyword from session if not set
+        }
+
         $perPage = 5;
         $collections = $query->paginate($perPage);
-        $collections->appends($request->query());      
+        $collections->appends($request->query());
+
         $count = $collections->total();
         $message = ($count === 1) ? '1 result found' : "$count results found";
-            
+
         return view('BookCafe_Sys.bc_collection', compact('collections', 'message'));
     }
 
 
+
+
     public function generatePDF(Request $request)
     {
-        $search = session('search'); // get the search keyword from session
+        $search = session('search');
+        $filter = session('filter');
+    
         $query = Collection::query();
+    
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('BookID', 'like', "%{$search}%")
-                ->orWhere('Description', 'like', "%{$search}%")
-                ->orWhereHas('author', function($query) use ($search) {
-                    $query->where('AuthorName', 'like', "%{$search}%");
-                })
-                ->orWhereHas('publisher', function($query) use ($search) {
-                    $query->where('PublisherName', 'like', "%{$search}%");
-                })
-                ->orWhereHas('genre', function($query) use ($search) {
-                    $query->where('Genre', 'like', "%{$search}%");
-                });
+                  ->orWhere('Description', 'like', "%{$search}%")
+                  ->orWhereHas('author', function ($query) use ($search) {
+                        $query->where('AuthorName', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('publisher', function ($query) use ($search) {
+                        $query->where('PublisherName', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('genre', function ($query) use ($search) {
+                        $query->where('Genre', 'like', "%{$search}%");
+                  });
             });
         }
-        $collections = $query->get(); // get the filtered collections
     
+        if ($filter) {
+            $query->where(function ($q) use ($filter) {
+                $q->where('BookID', $filter)
+                ->orWhereHas('genre', function ($query) use ($filter) {
+                    $query->where('Genre', $filter);
+              })
+                  ->orWhereHas('author', function ($query) use ($filter) {
+                        $query->where('AuthorName', $filter);
+                  })
+                  ->orWhereHas('publisher', function ($query) use ($filter) {
+                    $query->where('PublisherName', $filter);
+                });
+            });
+
+            session(['filter' => $filter]); // save the filter keyword in session
+        } else {
+            session()->forget('filter'); // remove the filter keyword from session if not set
+        }
+
+        
+
+        $collections = $query->get();
+
         $pdf = PDF::loadView('book-pdf', compact('collections'));
         return $pdf->download('book-collections.pdf');
     }
+
+
+
 
 
 
