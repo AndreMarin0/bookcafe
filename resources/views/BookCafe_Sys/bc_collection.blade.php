@@ -61,7 +61,8 @@ use App\Http\Controllers\CollectionController;
 
                 <div class="card-body ">
                     <form id="search-form" action="{{ route('collections.index') }}" method="GET" role="search">
-                        <div class="form-group">
+
+                        <div class="form-group col-sm-9">
                           <label for="search">Search books:</label>
                           <div class="input-group">
                             <input type="text" class="form-control" name="search" placeholder="Search books">
@@ -72,7 +73,8 @@ use App\Http\Controllers\CollectionController;
                             </span>
                           </div>
                         </div>
-                        <div class="form-group col-sm-4">
+                        
+                        <div class="form-group col-sm-3">
                           <label for="filter">Filter by:</label>
                           <select id="filter-select" name="filter" class="form-control">
                             <option value="">All</option>
@@ -89,13 +91,13 @@ use App\Http\Controllers\CollectionController;
                               <option value="manga">Manga</option>
                             </optgroup>
                           </select>
-                        </div>
+                        </div>                                                     
                       </form>
-                      
-        
+                                         
 
-                    <div class="d-flex justify-content-center headings">  
-                        <div>{{ $message }}</div>                      
+                    <div class="d-flex justify-content-between headings-cstm">  
+                        <button class="my-button btn-sm btn-info ml-3 headings-cstm" onclick="openModal()">View Graph</button>
+                        <div>{{ $message }}</div>                                             
                     </div>
                     
                     <br>
@@ -122,14 +124,14 @@ use App\Http\Controllers\CollectionController;
                                 
                                 @if(Auth::check() && Auth::user()->isAdmin())
                                 <td class="button-cell edit-delete">
-                                    <a class="btn btn-outline-success" href="{{route('collections.edit',$collection->BookID)}}" role="button">
+                                    <a class="btn btn-outline-secondary" href="{{route('collections.edit',$collection->BookID)}}" role="button">
                                         Edit
                                     </a>
                                         <p> </p>
                                     <form action="{{route('collections.destroy', $collection->BookID)}}" method="POST" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
+                                        <button type="submit" class="btn btn btn-outline-dark">
                                             Delete
                                         </button>
                                     </form>
@@ -146,12 +148,12 @@ use App\Http\Controllers\CollectionController;
 
                     <div class="text-center mt-3">
                         <div class="d-flex justify-content-between">
-                            <a class="btn btn-sm btn-warning mr-3" href="{{ route('collections.create') }}" role="button">
+                            <a class="btn btn-sm btn-info ml-3" href="{{ route('collections.create') }}" role="button">
                             Add Book
                             </a>                              
                             <form id="pdf-form" action="{{ route('collection.generatePDF') }}" method="GET">
                                 @csrf                               
-                                <button type="submit" class="btn btn-sm btn-warning ml-3">
+                                <button type="submit" class="btn btn-sm btn-info ml-3">
                                     Generate PDF
                                 </button>
                             </form>   
@@ -168,9 +170,25 @@ use App\Http\Controllers\CollectionController;
 
 <br>
 
-<div style="width: 400px; height: 400px;">
-    <canvas id="myChart"></canvas>
-</div>
+
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-header">
+        <h2>Books by Genre</h2>
+      </div>
+      <div class="modal-body">
+        <div class="chart-container">
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
 
   <script>
     const ctx = document.getElementById('myChart').getContext('2d');
@@ -207,7 +225,7 @@ use App\Http\Controllers\CollectionController;
             plugins: {
                 title: {
                     display: true,
-                    text: 'Books by Genre',
+                    text: ' ',
                     color: '#000000'
                 },
                 tooltip: {
@@ -260,16 +278,26 @@ const myChart = new Chart(ctx, chartConfig);
 </script>
 
 <script>
-    const form = document.getElementById('search-form');
-    const filterSelect = document.getElementById('filter-select');
-    filterSelect.addEventListener('change', (event) => {
-      const searchInput = document.getElementsByName('search')[0];
-      const searchValue = searchInput.value.trim();
-      const filterValue = filterSelect.value.trim();
-      const query = `search=${encodeURIComponent(searchValue)}&filter=${encodeURIComponent(filterValue)}`;
-      form.action = "{{ route('collections.index') }}?" + query;
-      form.submit();
-    });
-  </script>
+    function openModal() {
+        document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+</script>
+
+    <script>
+        const form = document.getElementById('search-form');
+        const filterSelect = document.getElementById('filter-select');
+        filterSelect.addEventListener('change', (event) => {
+        const searchInput = document.getElementsByName('search')[0];
+        const searchValue = searchInput.value.trim();
+        const filterValue = filterSelect.value.trim();
+        const query = `search=${encodeURIComponent(searchValue)}&filter=${encodeURIComponent(filterValue)}`;
+        form.action = "{{ route('collections.index') }}?" + query;
+        form.submit();
+        });
+    </script>
 
 @endsection

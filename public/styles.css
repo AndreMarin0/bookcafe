@@ -1,13 +1,16 @@
 body{   
     font-family: "Times New Roman", Times, serif;
-    /* background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364)!important; */
-    /* background-color: #818181!important; */
-    background-color: rgb(89, 97, 102)!important;
+    /* background-color: rgb(114, 121, 126)!important; */
+    background-color: #707070!important;
     background-size: cover!important;    
     min-height: 100vh;      
 }   
+.bg-black {
+  background-color: #707070;
+}
 .bg-light-opacity {
-  background-color: rgba(129, 129, 129, 0.5)!important;
+  /* background-color: rgba(253, 253, 253, 0.753)!important; */
+  background-color: rgb(186, 186, 192)!important;
 }
 .card {
   overflow: hidden;
@@ -77,7 +80,7 @@ body{
   }
   input:focus {
     outline: none !important;
-    border-bottom: 2px solid rgb(249,115,0);
+    border-bottom: 2px solid #00ffffc7;
     font-size: 17px;
     font-weight: bold;
     color: white;
@@ -104,16 +107,16 @@ body{
     padding: 10px;
     width: 150px;
     border-radius: 20px;
-    background-color: rgb(249,115,0);
+    background-color: #00ffffc7;
     border-style: none;
     color: white;
     font-weight: 600;
   }
   .btn2:hover{
-    background-color: rgba(249,115,0, 0.5);
+    background-color: #00ffffc7;
   }
   .btn button:hover{
-    border-bottom: 2px solid rgb(249,115,0);
+    border-bottom: 2px solid #00ffffc7;
   }
    
 
@@ -125,7 +128,7 @@ body{
     padding: 2em;  
 }
 .description h1{
- color:#F97300 ;
+ color:#00ffffc7 ;
 }
 .description p{
  color:#F9F6EE;
@@ -134,8 +137,8 @@ body{
  line-height: 1.5;
 }
 .description button{
- border:1px  solid #F97300;
- background:#F97300;
+ border:1px  solid #00ffff4d;
+ background:#00ffff7c;
  color:#fff;
 }
 .team{
@@ -147,7 +150,7 @@ body{
  padding-bottom:20%;
 }
 .team h1{
- color:#F97300;
+ color:#00ffffc7;
  margin: 2em; 
 }
 .team .item{
@@ -196,7 +199,7 @@ th{
     background-color: lightgray;
 }
 td{
-    background-color: ghostwhite;
+    background-color: rgba(248, 248, 255, 0.596);
     vertical-align: middle;
     padding: 5px;
 }
@@ -214,8 +217,8 @@ p{
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color:rgba(41, 39, 39, 0.3);
+  height: 70vh;
+  background-color:#707070;
   color: white;
 }
 
@@ -251,7 +254,6 @@ p{
 .formGroup select:focus,
 .formGroup input:focus {
   outline: none !important;
-  border-bottom: 2px solid rgb(249,115,0);
   font-size: 18px;
   font-weight: bold;
   color: white;
@@ -260,7 +262,7 @@ p{
 .btn2{
   padding: 10px 20px;
   border-radius: 20px;
-  background-color: rgb(249,115,0);
+  background-color: #00ffff7c;
   border-style: none;
   color: white;
   font-weight: 600;
@@ -269,7 +271,7 @@ p{
 }
 
 .btn2:hover{
-  background-color: rgba(249,115,0, 0.8);
+  background-color: #00ffff7c;
 }
 
 ul.pagination {
@@ -322,10 +324,6 @@ select option {
   color: #fff;
 }
 
-.bg-black {
-  background-color: #292828;
-}
-
 .headings{
   color: black;
   font-size: 20px;
@@ -340,4 +338,98 @@ select option {
 
 .button-cell button {
   margin:auto;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: rgba(253, 253, 253, 0.884)!important;
+  margin: 10% auto 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+  width: 55%;
+  max-width: 400px;
+  position: relative;
+}
+
+
+/* Close Button */
+.close {
+  color: #ffffff!important;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: rgb(255, 255, 255)!important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  background-color: #302c2c;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 380px;
+}
+
+.my-button {
+  background-color: #00ffff36;
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.my-button:hover {
+  background-color: #00ffff7c;
+}
+
+.my-button:active {
+  background-color: #00ffff7c;
+  transform: translateY(2px);
+}
+
+.headings-cstm{
+  font-size: 15px;
+}
+
+#search-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
