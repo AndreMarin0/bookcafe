@@ -25,13 +25,7 @@ use App\Models\Collection;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('/bookpdf', function () {
-    $collections =Collection::all();
-    return view('book-pdf')->with('collections', $collections);
-});
 
-
-Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');
 
 
 Route::prefix('admin')->middleware('auth', 'isAdmin')->group(function() {
@@ -70,3 +64,15 @@ Auth::routes(['logout' => true]);
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/bookpdf', function () {
+    $collections =Collection::all();
+    return view('book-pdf')->with('collections', $collections);
+});
+
+Route::get('/chart-pdf', function () {
+    $collections =Collection::all();
+    return view('chart-pdf')->with('collections', $collections);
+});
+
+Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');

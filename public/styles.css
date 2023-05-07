@@ -1,11 +1,13 @@
 body{   
     font-family: "Times New Roman", Times, serif;
-    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364)!important;
+    /* background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364)!important; */
+    /* background-color: #818181!important; */
+    background-color: rgb(89, 97, 102)!important;
     background-size: cover!important;    
     min-height: 100vh;      
 }   
 .bg-light-opacity {
-  background-color: rgba(255, 255, 255, 0.5)!important;
+  background-color: rgba(129, 129, 129, 0.5)!important;
 }
 .card {
   overflow: hidden;
@@ -179,9 +181,11 @@ body{
   from { transform: scale(1); }
   to { transform: scale(1.1); }
 }
+
+/* table */
 table, th, td{
-    border: 1px solid black;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0px;
     margin: auto;
 }
 table{
@@ -189,11 +193,17 @@ table{
     text-align: center;
 }
 th{
-    background-color: gray;
-}
-td{
     background-color: lightgray;
 }
+td{
+    background-color: ghostwhite;
+    vertical-align: middle;
+    padding: 5px;
+}
+td.edit-delete{
+  white-space: nowrap;
+}
+
 p{
     text-align: center;
     font-size: 5ch;
@@ -313,5 +323,21 @@ select option {
 }
 
 .bg-black {
-  background-color: #1a1717;
+  background-color: #292828;
+}
+
+.headings{
+  color: black;
+  font-size: 20px;
+  /* font-weight: bold; */
+}
+
+.button-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-cell button {
+  margin:auto;
 }

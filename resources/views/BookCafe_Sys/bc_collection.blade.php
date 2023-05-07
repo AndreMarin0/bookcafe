@@ -52,11 +52,12 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\CollectionController;
 ?>
 
+<br>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card bg-light-opacity">
-                <div class="card-header">{{ __('Book List') }}</div>
+                <div class="card-header headings">{{ __('Book List') }}</div>
 
                 <div class="card-body ">
                     <form action="{{ route('collections.index') }}" method="GET" role="search">
@@ -71,7 +72,7 @@ use App\Http\Controllers\CollectionController;
                     </form>
                     <br>
 
-                    <div class="d-flex justify-content-center">  
+                    <div class="d-flex justify-content-center headings">  
                         <div>{{ $message }}</div>                      
                     </div>
                     
@@ -98,7 +99,7 @@ use App\Http\Controllers\CollectionController;
                                 <td>{{ $collection->genre->Genre }}</td>
                                 
                                 @if(Auth::check() && Auth::user()->isAdmin())
-                                <td>
+                                <td class="button-cell edit-delete">
                                     <a class="btn btn-outline-success" href="{{route('collections.edit',$collection->BookID)}}" role="button">
                                         Edit
                                     </a>
@@ -131,26 +132,110 @@ use App\Http\Controllers\CollectionController;
                                 <button type="submit" class="btn btn-sm btn-warning ml-3">
                                     Generate PDF
                                 </button>
-                            </form>                                                                                                                                                                                                                                               
+                            </form>   
+                                                     
+                                                                                                                                                                                                                                                                       
                         </div>
-                    </div> 
-
-                    
-
-                    
-
+                    </div>                       
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-{{-- <script>
-    function generatePDF() {
-        // document.getElementById("pdf-form").submit();
-        var form = document.getElementById('pdf-form');
-        form.submit();
-    }
-    </script> --}}
+<br>
+
+<div style="width: 400px; height: 400px;">
+    <canvas id="myChart"></canvas>
+</div>
+
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    // Group the books by genre and count the number of books in each group
+    const genres = {!! json_encode($collections->groupBy('genre.Genre')->map->count()) !!};
+
+    // Create an array of labels and data from the grouped data
+    const labels = Object.keys(genres);
+    const data = Object.values(genres);
+
+    const backgroundColor = [
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(255, 206, 86, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 159, 64, 0.8)'
+    ];
+
+    const chartData = {
+        labels: labels,
+        datasets: [{
+            data: data,
+            backgroundColor: backgroundColor
+        }]
+    };
+
+    const chartConfig = {
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Books by Genre',
+                    color: '#000000'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.label || '';
+                            var value = context.formattedValue || '';
+                            var percentage = context.chart.data.datasets[0].data[context.dataIndex];
+                            percentage = '(' + ((percentage / data.reduce((a, b) => a + b, 0)) * 100).toFixed(2) + '%)';
+                            return label + ': ' + value + ' ' + percentage;
+                        }
+                    }
+                },
+                legend: {
+                    display: true,
+                    position: 'right',
+                    align: 'start',
+                    labels: {
+                        usePointStyle: true,
+                        generateLabels: function(chart) {
+                            const labels = chart.data.labels;
+                            const datasets = chart.data.datasets;
+                            const total = data.reduce((a, b) => a + b, 0);
+                            let legendItems = [];
+
+                            labels.forEach(function(label, index) {
+                                const backgroundColor = datasets[0].backgroundColor[index];
+                                const value = datasets[0].data[index];
+                                const percentage = ((value / total) * 100).toFixed(2);
+
+                                legendItems.push({
+                                    text: label + ' (' + percentage + '%)',
+                                    fillStyle: backgroundColor,
+                                    hidden: false,
+                                    index: index
+                                });
+                            });
+
+                            return legendItems;
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
+const myChart = new Chart(ctx, chartConfig);
+
+</script>
+
 
 @endsection

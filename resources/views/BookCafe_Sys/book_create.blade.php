@@ -11,7 +11,7 @@
       
       <div class="formGroup">
           <label for="Description">Description:</label>
-          <input type="text" id="Description" name="Description">
+          <input type="text" id="Description" name="Description" required>
       </div>
 
       <div class="formGroup">

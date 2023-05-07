@@ -41,6 +41,9 @@ class CollectionController extends Controller
                     $query->where('Genre', 'like', "%{$search}%");
                 });
             });
+            session(['search' => $search]); // save the search keyword in session
+        } else {
+            session()->forget('search'); // remove the search keyword from session if not set
         }
 
         $perPage = 5;
@@ -48,18 +51,37 @@ class CollectionController extends Controller
         $collections->appends($request->query());      
         $count = $collections->total();
         $message = ($count === 1) ? '1 result found' : "$count results found";
-        
+            
         return view('BookCafe_Sys.bc_collection', compact('collections', 'message'));
     }
 
 
-    public function generatePDF()
-    {           
-        // dd('PDF generation code is being executed');
-        $collections =Collection::all();
+    public function generatePDF(Request $request)
+    {
+        $search = session('search'); // get the search keyword from session
+        $query = Collection::query();
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('BookID', 'like', "%{$search}%")
+                ->orWhere('Description', 'like', "%{$search}%")
+                ->orWhereHas('author', function($query) use ($search) {
+                    $query->where('AuthorName', 'like', "%{$search}%");
+                })
+                ->orWhereHas('publisher', function($query) use ($search) {
+                    $query->where('PublisherName', 'like', "%{$search}%");
+                })
+                ->orWhereHas('genre', function($query) use ($search) {
+                    $query->where('Genre', 'like', "%{$search}%");
+                });
+            });
+        }
+        $collections = $query->get(); // get the filtered collections
+    
         $pdf = PDF::loadView('book-pdf', compact('collections'));
         return $pdf->download('book-collections.pdf');
     }
+
+
 
 
 

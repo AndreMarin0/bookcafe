@@ -11,7 +11,7 @@
         
         <div class="formGroup">
             <label for="Description">Description:</label>
-            <input type="text" id="Description" name="Description" value="{{ $collection->Description }}">
+            <input type="text" id="Description" name="Description" value="{{ $collection->Description }}" required>
         </div>
 
         <div class="formGroup">
