@@ -137,9 +137,9 @@ use App\Http\Controllers\CollectionController;
                                     </form>
                                 </td>
                                 @else
-                                    <td class="button-cell">
-                                        <a class="btn btn-outline-secondary" href="" role="button">
-                                            View
+                                    <td class="button-cell edit-delete">
+                                        <a class="btn btn-outline-secondary userbtn" href="" role="button">
+                                            <img src="{{ asset('icons/add-box-line.png') }}" alt="To Read">
                                         </a>
                                     </td>
                                 @endif
