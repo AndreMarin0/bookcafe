@@ -110,7 +110,7 @@ use App\Http\Controllers\CollectionController;
                                 <th>Author</th>
                                 <th>Publisher</th>
                                 <th>Genre</th>
-                                @if(Auth::check() && Auth::user()->isAdmin()) <th> </th> @endif
+                                <th> </th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -136,6 +136,12 @@ use App\Http\Controllers\CollectionController;
                                         </button>
                                     </form>
                                 </td>
+                                @else
+                                    <td class="button-cell">
+                                        <a class="btn btn-outline-secondary" href="" role="button">
+                                            View
+                                        </a>
+                                    </td>
                                 @endif
                             </tr>
                             @endforeach

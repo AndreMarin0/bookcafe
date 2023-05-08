@@ -32,9 +32,11 @@ Route::prefix('admin')->middleware('auth', 'isAdmin')->group(function() {
     // admin only entry
     Route::get('/collections/create', [CollectionController::class, 'create'])->name('collections.create');
     Route::get('/collections/{collection}/edit', [CollectionController::class, 'edit'])->name('collections.edit');
+    
 });
 
-Route::middleware([AdminMiddleware::class])->group(function () {
+
+Route::middleware(['auth', 'role.check'])->group(function () {
     Route::get('/book_create', function () {
         return view('BookCafe_Sys.book_create');
     });
@@ -44,19 +46,27 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 });
 
 
+
 Route::get('/home', function () {
     return view('layouts.app');
 });
-
-
 
 Route::get('/landing', function () {
     return view('BookCafe.book_cafe');
 });
 
 
-Route::resource('collections', CollectionController::class)->except(['create','edit']);//added
-Route::resource('authors', AuthorController::class);//added
+
+
+
+Route::group(['middleware' => ['role.check']], function () {
+    Route::resource('collections', CollectionController::class)->except(['create', 'edit']);
+    Route::resource('authors', AuthorController::class);
+});
+
+
+// Route::resource('collections', CollectionController::class)->except(['create','edit']);//added
+// Route::resource('authors', AuthorController::class);//added
 Route::resource('genres', GenreController::class);//added
 Route::resource('publishers', PublisherController::class);//added
 Auth::routes();
