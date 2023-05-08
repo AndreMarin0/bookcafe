@@ -336,6 +336,10 @@ select option {
   align-items: center;
 }
 
+.userbtn{
+  font-size: 10px;
+}
+
 .button-cell button {
   margin:auto;
 }

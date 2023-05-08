@@ -88,7 +88,7 @@
 
     <footer>  
         <!-- Copyright -->
-        <div class="text-center text-white p-3 fixed-bottom navbar-custom">
+        <div class="text-center text-white p-3 navbar-custom">
           © 2020 Copyright:
           <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
         </div>
