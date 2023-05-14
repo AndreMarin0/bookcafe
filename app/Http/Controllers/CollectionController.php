@@ -75,7 +75,6 @@ class CollectionController extends Controller
 
 
 
-
     public function generatePDF(Request $request)
     {
         $search = session('search');
@@ -125,12 +124,6 @@ class CollectionController extends Controller
         $pdf = PDF::loadView('book-pdf', compact('collections'));
         return $pdf->download('book-collections.pdf');
     }
-
-
-
-
-
-
 
 
     /**
@@ -206,7 +199,7 @@ class CollectionController extends Controller
     {   
        
         $collection->update($request->all());
-        return redirect('/collections')->with('success2', 'Form updated successfully!');
+        return redirect('/collections')->with('success', 'Form updated successfully!');
 
     }
 
@@ -222,6 +215,6 @@ class CollectionController extends Controller
             return redirect()->route('collections.index')->with('error', 'Access denied: Only admin can delete books');
         }
         $collection->delete();
-        return redirect('/collections')->with('success3', 'Deleted successfully!');
+        return redirect('/collections')->with('success', 'Deleted successfully!');
     }
 }

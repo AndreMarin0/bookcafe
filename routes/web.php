@@ -7,6 +7,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PublisherController;
+use App\Http\Controllers\reqController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Models\Collection;
 
@@ -25,8 +26,6 @@ use App\Models\Collection;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 Route::prefix('admin')->middleware('auth', 'isAdmin')->group(function() {
     // admin only entry
@@ -50,23 +49,15 @@ Route::middleware(['auth', 'role.check'])->group(function () {
 Route::get('/home', function () {
     return view('layouts.app');
 });
-
 Route::get('/landing', function () {
     return view('BookCafe.book_cafe');
 });
-
-
-
-
 
 Route::group(['middleware' => ['role.check']], function () {
     Route::resource('collections', CollectionController::class)->except(['create', 'edit']);
     Route::resource('authors', AuthorController::class);
 });
 
-
-// Route::resource('collections', CollectionController::class)->except(['create','edit']);//added
-// Route::resource('authors', AuthorController::class);//added
 Route::resource('genres', GenreController::class);//added
 Route::resource('publishers', PublisherController::class);//added
 Auth::routes();
@@ -86,3 +77,10 @@ Route::get('/chart-pdf', function () {
 });
 
 Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');
+
+Route::resource('reqs', ReqController::class);//added
+
+
+
+
+

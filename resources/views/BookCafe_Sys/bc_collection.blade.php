@@ -14,30 +14,11 @@
     </div>
 @endif
 
+
 @if (session('success'))
     <div class="alert alert-success rounded-0 alert-dismissible fade show mb-0" role="alert">
         <i class="fas fa-check-circle mr-2"></i>
         <strong>{{ session('success') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
-
-@if (session('success2'))
-    <div class="alert alert-success rounded-0 alert-dismissible fade show mb-0" role="alert">
-        <i class="fas fa-check-circle mr-2"></i>
-        <strong>{{ session('success2') }}</strong>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endif
-
-@if (session('success3'))
-    <div class="alert alert-success rounded-0 alert-dismissible fade show mb-0" role="alert">
-        <i class="fas fa-check-circle mr-2"></i>
-        <strong>{{ session('success3') }}</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -53,6 +34,7 @@ use App\Http\Controllers\CollectionController;
 ?>
 
 <br>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -96,7 +78,10 @@ use App\Http\Controllers\CollectionController;
                                          
 
                     <div class="d-flex justify-content-between headings-cstm">  
-                        <button class="my-button btn-sm btn-info ml-3 headings-cstm" onclick="openModal()">View Graph</button>
+                        
+                        @if(Auth::check() && Auth::user()->isAdmin())
+                            <a class="btn btn-sm btn-info ml-3" href="{{ route('reqs.index') }}" role="button">View Requests</a>
+                            @endif
                         <div>{{ $message }}</div>                                             
                     </div>
                     
@@ -110,7 +95,9 @@ use App\Http\Controllers\CollectionController;
                                 <th>Author</th>
                                 <th>Publisher</th>
                                 <th>Genre</th>
+                                @if(Auth::check() && Auth::user()->isAdmin())
                                 <th> </th> 
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -136,12 +123,6 @@ use App\Http\Controllers\CollectionController;
                                         </button>
                                     </form>
                                 </td>
-                                @else
-                                    <td class="button-cell edit-delete">
-                                        <a class="btn btn-outline-secondary userbtn" href="" role="button">
-                                            <img src="{{ asset('icons/add-box-line.png') }}" alt="To Read">
-                                        </a>
-                                    </td>
                                 @endif
                             </tr>
                             @endforeach
@@ -154,9 +135,16 @@ use App\Http\Controllers\CollectionController;
 
                     <div class="text-center mt-3">
                         <div class="d-flex justify-content-between">
+                            @if(Auth::check() && Auth::user()->isAdmin())
                             <a class="btn btn-sm btn-info ml-3" href="{{ route('collections.create') }}" role="button">
                             Add Book
-                            </a>                              
+                            </a>      
+                            @else
+                            <button class="btn btn-sm btn-info ml-3" onclick="openModal2()">Send Request</button>
+                            @endif             
+                            
+                            <button class="my-button btn-sm btn-info ml-3 headings-cstm" onclick="openModal()">View Graph</button>
+                            
                             <form id="pdf-form" action="{{ route('collection.generatePDF') }}" method="GET">
                                 @csrf                               
                                 <button type="submit" class="btn btn-sm btn-info ml-3">
@@ -178,24 +166,57 @@ use App\Http\Controllers\CollectionController;
 
 
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <div class="modal-header">
-        <h2>Books by Genre</h2>
-      </div>
-      <div class="modal-body">
-        <div class="chart-container">
-          <canvas id="myChart"></canvas>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2>Books by Genre</h2>
+            </div>
+            <div class="modal-body">
+                <div class="chart-container">
+                <canvas id="myChart"></canvas>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 
+ 
+  @if(Auth::check() && Auth::user()->isAdmin())
+    <div id="btnadmin" class="modal">
+        
+    </div>
+    @else
+        <div id="requestbtn" class="modal">
+            <div class="modal-content3">
+            <span class="close" onclick="closeModal2()">&times;</span>
 
+            <div class="modal-header">
+                <h2>Request to send to admin</h2>
+            </div>
 
+            <div class="modal-body">
+                <form name="reqForm" action="{{ route('reqs.store') }}" method="post">
+                    @csrf
+                    <label for="requests">Request:</label>
+                    <select id="requests" name="requests">
+                        <option value="Request to add a book">Add a Book</option>
+                        <option value="Request to remove a book">Remove a Book</option>
+                    </select><br><br>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" cols="50"></textarea><br><br>
+                    <input type="submit" onclick="formSubmit()" value="Send Request!">
+                </form>
+                
+                
+            </div>
 
+            </div>
+        </div>
+    @endif
+
+  
+    
   <script>
     const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -278,12 +299,14 @@ use App\Http\Controllers\CollectionController;
         }
     };
 
-
-const myChart = new Chart(ctx, chartConfig);
-
+    const myChart = new Chart(ctx, chartConfig);
 </script>
 
 <script>
+    function formSubmit() {
+        document.forms["reqForm"].submit();
+    }
+
     function openModal() {
         document.getElementById('myModal').style.display = 'block';
     }
@@ -291,7 +314,16 @@ const myChart = new Chart(ctx, chartConfig);
     function closeModal() {
         document.getElementById('myModal').style.display = 'none';
     }
+    function openModal2() {
+        document.getElementById('requestbtn').style.display = 'block';
+    }
+
+    function closeModal2() {
+        document.getElementById('requestbtn').style.display = 'none';
+    }
 </script>
+
+
 
     <script>
         const form = document.getElementById('search-form');
@@ -305,5 +337,6 @@ const myChart = new Chart(ctx, chartConfig);
         form.submit();
         });
     </script>
+
 
 @endsection
