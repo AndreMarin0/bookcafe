@@ -15,6 +15,7 @@ class Collection extends Model
         'DatePublished',
         'PubID',
         'GenID',
+        'Status',
     ];
     protected $primaryKey = 'BookID';
             public function publisher()

@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Req extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        
+        'Stat',
+        
+    ];
 }

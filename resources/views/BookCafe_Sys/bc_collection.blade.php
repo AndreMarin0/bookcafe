@@ -34,11 +34,29 @@ use App\Http\Controllers\CollectionController;
 ?>
 
 <br>
+@if(Auth::check() && !Auth::user()->isAdmin())
+    @foreach ($requests as $request)
+    @if ($request->Stat == 'true')
+    <div class="request-box">
+        <h3 class="request-box__title">{{ $request->Requests }}</h3>
+        <p class="request-box__content">{{ $request->Message }}</p>
+        <br>
+        <form action="{{route('reqs.destroy', $request->id)}}" method="POST" onsubmit="return confirm('delete?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn btn-outline-dark">
+                Delete
+            </button>
+        </form>
+    </div>
+    @endif
+    @endforeach
+@endif
 
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container2">
+    <div class=" justify-content-center">
         <div class="col-md-8">
-            <div class="card bg-light-opacity">
+            <div class="card2 bg-light-opacity">
                 <div class="card-header headings">{{ __('Book List') }}</div>
 
                 <div class="card-body ">
@@ -81,6 +99,7 @@ use App\Http\Controllers\CollectionController;
                         
                         @if(Auth::check() && Auth::user()->isAdmin())
                             <a class="btn btn-sm btn-info ml-3" href="{{ route('reqs.index') }}" role="button">View Requests</a>
+                            <a class="btn btn-sm btn-info ml-3" href="/transaction1" role="button">View transaction</a>
                             @endif
                         <div>{{ $message }}</div>                                             
                     </div>
@@ -95,9 +114,11 @@ use App\Http\Controllers\CollectionController;
                                 <th>Author</th>
                                 <th>Publisher</th>
                                 <th>Genre</th>
-                                @if(Auth::check() && Auth::user()->isAdmin())
+                                @if(Auth::check() && !Auth::user()->isAdmin())
+                                    <th>Status</th>
+                                @endif                             
                                 <th> </th> 
-                                @endif
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -108,7 +129,10 @@ use App\Http\Controllers\CollectionController;
                                 <td>{{ $collection->author->AuthorName }}</td>
                                 <td>{{ $collection->publisher->PublisherName }}</td>
                                 <td>{{ $collection->genre->Genre }}</td>
-                                
+                                @if(Auth::check() && !Auth::user()->isAdmin())
+                                    <td>{{ $collection->Status }}</td>
+                                @endif
+
                                 @if(Auth::check() && Auth::user()->isAdmin())
                                 <td class="button-cell edit-delete">
                                     <a class="btn btn-outline-secondary" href="{{route('collections.edit',$collection->BookID)}}" role="button">
@@ -122,6 +146,17 @@ use App\Http\Controllers\CollectionController;
                                             Delete
                                         </button>
                                     </form>
+                                </td>
+                                @else
+                                <td class="button-cell edit-delete">                                                
+                                    <form action="{{ route('collection.updateStatus', $collection->BookID) }}" method="POST" onsubmit="return confirm('Request to borrow book.');">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="Status" value="Pending">
+                                        <button type="submit" class="btn btn-default">
+                                            <img src="{{ asset('icons/add-box-line.png') }}" alt="To Read">
+                                        </button>     
+                                    </form>    
                                 </td>
                                 @endif
                             </tr>
@@ -192,22 +227,24 @@ use App\Http\Controllers\CollectionController;
             <span class="close" onclick="closeModal2()">&times;</span>
 
             <div class="modal-header">
-                <h2>Request to send to admin</h2>
+                <h2>Add custom note to self</h2>
             </div>
 
             <div class="modal-body">
                 <form name="reqForm" action="{{ route('reqs.store') }}" method="post">
                     @csrf
-                    <label for="requests">Request:</label>
+                    <label for="requests">Sticker😉📸: </label>
                     <select id="requests" name="requests">
-                        <option value="Request to add a book">Add a Book</option>
-                        <option value="Request to remove a book">Remove a Book</option>
+                        <option value="Cake🎂">Cake🎂</option>
+                        <option value="Burger🍔">Burger🍔</option>
                     </select><br><br>
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="5" cols="50"></textarea><br><br>
-                    <input type="submit" onclick="formSubmit()" value="Send Request!">
+                    <label for="message">Note:</label>
+                    <textarea id="message" name="message" rows="5" cols="50"></textarea>
+                    <br><br>
+                    <input type="submit" onclick="formSubmit()" value="Send Request">
                 </form>
                 
+
                 
             </div>
 

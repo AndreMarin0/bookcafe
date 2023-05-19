@@ -76,9 +76,17 @@ Route::get('/chart-pdf', function () {
     return view('chart-pdf')->with('collections', $collections);
 });
 
-Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');
+Route::get('/transaction1', function () {
+    $collections =Collection::all();
+    return view('transaction1')->with('collections', $collections);
+});
 
+Route::get('/collection/pdf', [CollectionController::class, 'generatePDF'])->name('collection.generatePDF');
+Route::put('/collections/{collection}', [CollectionController::class, 'updateStatus'])->name('collection.updateStatus');
 Route::resource('reqs', ReqController::class);//added
+Route::put('/reqs/{req}', [ReqController::class, 'updateStatus'])->name('req.updateStatus');
+
+
 
 
 

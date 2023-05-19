@@ -12,9 +12,23 @@ body{
   /* background-color: rgba(253, 253, 253, 0.753)!important; */
   background-color: rgb(186, 186, 192)!important;
 }
+.container2 {
+  display: flex;
+  justify-content: center;
+}
+
 .card {
   overflow: hidden;
 }
+
+.card2 {
+  overflow: hidden;
+  /* min-width:100%; */
+  width: 120vh;
+  padding-left: 0!important;
+  margin: 0 auto; /* Add this line to center the card */
+}
+
 
 .navsize{
     font-size: 20px;
@@ -529,6 +543,26 @@ select option {
 
 .cardbutton.reject {
   left: 0;
+}
+
+.request-box {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 300px; /* Adjust the width as needed */
+  float: left;
+  clear: left;
+}
+
+.request-box__title {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.request-box__content {
+  font-size: 14px;
+  color: #666;
 }
 
 

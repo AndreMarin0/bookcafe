@@ -98,6 +98,14 @@ class ReqController extends Controller
         //
     }
 
+    public function updateStatus(UpdateReqRequest $request, Req $req)
+    {
+        $req->update([
+            'Stat' => $request->input('Stat', $req->Stat),
+        ]);
+        return back();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -107,7 +115,6 @@ class ReqController extends Controller
     public function destroy(Request $request, Req $req)
     {     
         $req->delete();
-        $request->session()->flash('error', 'Your request has been denied by the admin.');
         return redirect()->back();    
     }
 

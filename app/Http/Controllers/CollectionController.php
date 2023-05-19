@@ -6,6 +6,7 @@ use App\Models\Collection;
 use App\Models\Author;
 use App\Models\Genre;
 use App\Models\Publisher;
+use App\Models\Req;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -69,8 +70,8 @@ class CollectionController extends Controller
 
         $count = $collections->total();
         $message = ($count === 1) ? '1 result found' : "$count results found";
-
-        return view('BookCafe_Sys.bc_collection', compact('collections', 'message'));
+        $requests = Req::all();
+        return view('BookCafe_Sys.bc_collection', compact('collections', 'message','requests'));
     }
 
 
@@ -158,6 +159,7 @@ class CollectionController extends Controller
         $collection->AuthorID = $request->AuthorID; // Add this line to set the AuthorID
         $collection->PubID = $request->PubID;
         $collection->GenID = $request->GenID;
+        $collection->Status = 'Available';
         $collection->save();
         return redirect('/collections')->with('success', 'Form submitted successfully!');
 
@@ -182,9 +184,10 @@ class CollectionController extends Controller
      */
     public function edit(Collection $collection)
     {
+        
         $authors= Author::all();
         $genres= Genre::all();
-        $publishers= Publisher::all();
+        $publishers= Publisher::all();       
         return view('BookCafe_Sys.book_edit',compact('collection','authors','genres','publishers'));
     }
 
@@ -197,11 +200,19 @@ class CollectionController extends Controller
      */
     public function update(UpdateCollectionRequest $request, Collection $collection)
     {   
-       
+        dd('Update method reached');
         $collection->update($request->all());
         return redirect('/collections')->with('success', 'Form updated successfully!');
-
     }
+
+    public function updateStatus(UpdateCollectionRequest $request, Collection $collection)
+    {
+        $collection->update([
+            'Status' => $request->input('Status', $collection->Status),
+        ]);
+        return back();
+    }
+
 
     /**
      * Remove the specified resource from storage.
