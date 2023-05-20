@@ -227,13 +227,13 @@ use App\Http\Controllers\CollectionController;
             <span class="close" onclick="closeModal2()">&times;</span>
 
             <div class="modal-header">
-                <h2>Add custom note to self</h2>
+                <h2>Dog cat coco tea</h2>
             </div>
 
             <div class="modal-body">
                 <form name="reqForm" action="{{ route('reqs.store') }}" method="post">
                     @csrf
-                    <label for="requests">Sticker😉📸: </label>
+                    <label for="requests">Order😉📸: </label>
                     <select id="requests" name="requests">
                         <option value="Cake🎂">Cake🎂</option>
                         <option value="Burger🍔">Burger🍔</option>
